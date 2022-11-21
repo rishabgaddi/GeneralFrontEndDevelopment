@@ -20,8 +20,27 @@ Router.post('/', async (request: Request, response: Response) => {
     }
 });
 
-Router.get('/', (request: Request, response: Response) => {
-    response.status(200).json({"msg": "List todos page !"})
+Router.get('/', async (request: Request, response: Response) => {
+    const query = request.query.q;
+    let todos;
+    try {
+        if (query) {
+            todos = await todoModel.find({
+                "$or": [
+                    {"label": { $regex: query, $options: "i" }},
+                    {"description": { $regex: query, $options: "i" }}
+                ]
+            });
+        } else {
+            todos = await todoModel.find();
+        }
+    } catch(error) {
+        return response.status(500).json({"msg": error});
+    }
+    if (todos) {
+        return response.status(200).json(todos);
+    }
+    return response.status(200).json({"msg": "No todos found."});
 });
 
 Router.get('/:todoId', async (request: Request, response: Response) => {

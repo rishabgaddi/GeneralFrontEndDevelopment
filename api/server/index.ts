@@ -6,12 +6,20 @@ import todoRouter from "./routes/todo";
 const morgan = require('morgan');
 const helmet = require('helmet');
 const mongoose = require('mongoose');
+let session = require('express-session');
 
 const app = express();
 
 app.use(morgan('combined'));
 app.use(helmet());
 app.use(express.json());
+
+app.use(session({
+  secret: 'Its a secret.',
+  resave: false,
+  saveUninitialized: true,
+  cookie: { secure: true }
+}));
 
 mongoose.connect(`${process.env.MONGO_DB}`, {
   useNewUrlParser: true

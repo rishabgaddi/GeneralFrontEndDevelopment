@@ -11,7 +11,8 @@ export const userSchema = new Schema({
     required: [true, 'Enter a password'],
     trim: true,
     min: [6, "Your passowrd must be atleast 6 characters"]
-  }
+  },
+  todos: [{ type: mongoose.Types.ObjectId, ref: 'Todo'}]
 }, {
   timestamps: {
     createdAt: 'created_at',
