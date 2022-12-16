@@ -1,2 +1,30 @@
 #default {
+  font-family: Arial, Helvetica, sans-serif;
+  background-color: $lightBlue;
+  height: 100vh;
+
+  nav {
+    display: flex;
+    background-color: $darkBlue;
+    width: 100%;
+
+    a {
+      color: $lightBlue;
+      text-decoration: none;
+      font-size: 1.1rem;
+      display: block;
+      padding: 10px;
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+  }
+
+  .title {
+    color: $darkBlue;
+    margin: 40px 0 40px 0;
+  }
+  .container {
+    width: 80%;
+    margin: auto;
+  }
 }

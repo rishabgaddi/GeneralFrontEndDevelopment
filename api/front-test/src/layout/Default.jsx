@@ -1,9 +1,16 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
-const Default = () => {
+const Default = ({ children }) => {
   return (
-    <div>
-      <h1>Default</h1>
+    <div id="default">
+      <nav>
+        <Link to={"/"}>Home</Link>
+        <Link to={"/animals"}>Animals</Link>
+        <Link to={"/contact"}>Contacts</Link>
+        <Link to={"/register"}>Register</Link>
+      </nav>
+      <div className="container">{children}</div>
     </div>
   );
 };
