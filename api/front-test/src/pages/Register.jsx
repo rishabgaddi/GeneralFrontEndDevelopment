@@ -1,36 +1,66 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import { register } from "../services/auth";
 
 const Register = () => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: "",
     email_confirm: "",
     password: "",
     password_confirm: "",
   });
+  const [msg, setMsg] = useState(null);
 
   const onChangeForm = (event) => {
+    setMsg(null);
     const { name, value } = event.target;
     setFormData({ ...formData, [name]: value });
   };
 
   const onSubmtHandler = async (event) => {
     event.preventDefault();
+
+    if (formData.email === "" || formData.password === "") {
+      setMsg("Email or password is empty");
+      return;
+    }
+
+    if (
+      formData.email !== formData.email_confirm ||
+      formData.password !== formData.password_confirm
+    ) {
+      setMsg("Emails or passwords do not match");
+      return;
+    }
+
     const res = await register(formData);
+    if (res.status === 200) {
+      navigate("/");
+    } else {
+      setMsg(res.response.data.message);
+      setFormData({
+        email: "",
+        email_confirm: "",
+        password: "",
+        password_confirm: "",
+      });
+    }
   };
 
   return (
     <div>
       <h1 className="title">Create your account</h1>
       <form onSubmit={onSubmtHandler}>
+        {msg && <div className="msg msg-error">{msg}</div>}
         <div>
-          <label htmlFor="email">Email</label>
+          <label htmlFor="email">Email address</label>
           <input
             id="email"
             type="email"
             name="email"
-            placeholder="Enter your email"
+            placeholder="Enter your email address"
             value={formData.email}
             onChange={onChangeForm}
           />
@@ -56,7 +86,7 @@ const Register = () => {
           />
         </div>
         <div>
-          <label htmlFor="password_confirm">Password</label>
+          <label htmlFor="password_confirm">Confirm password</label>
           <input
             type="password"
             name="password_confirm"
@@ -67,7 +97,7 @@ const Register = () => {
         </div>
 
         <div>
-          <input type="submit" value="Submit" name="submit" />
+          <input type="submit" value="Create" name="send" />
         </div>
       </form>
     </div>

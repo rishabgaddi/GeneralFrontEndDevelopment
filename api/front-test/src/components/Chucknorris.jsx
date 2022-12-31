@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { getRandomFact } from "../services/chucknorris";
 
 const Chucknorris = () => {
-  const [fact, setFact] = useState("");
+  const [fact, setFact] = useState("No fact!");
   useEffect(() => {
     const fetchData = async () => {
       setFact(await getRandomFact());

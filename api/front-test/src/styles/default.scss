@@ -21,10 +21,56 @@
 
   .title {
     color: $darkBlue;
-    margin: 40px 0 40px 0;
+    margin: 40px 0;
   }
   .container {
     width: 80%;
     margin: auto;
+  }
+
+  ul {
+    padding-left: 20px;
+  }
+
+  .animals-list {
+    margin: 20px 0;
+  }
+
+  form {
+    width: 50%;
+    margin: auto;
+
+    div {
+      margin: 10px;
+    }
+
+    input,
+    textarea {
+      width: 100%;
+      display: block;
+      padding: 10px;
+    }
+
+    label {
+      width: 100%;
+      display: block;
+    }
+
+    input[type="submit"],
+    input[type="button"] {
+      background-color: $darkBlue;
+      color: $lightBlue;
+      cursor: pointer;
+    }
+
+    .row-container {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+    }
+
+    .msg-error {
+      color: $red;
+    }
   }
 }
