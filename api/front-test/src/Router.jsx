@@ -6,6 +6,7 @@ import Home from "./pages/Home";
 import Animals from "./pages/Animals";
 import Contact from "./pages/Contact";
 import Register from "./pages/Register";
+import Login from "./pages/Login";
 
 const Router = () => {
   return (
@@ -40,6 +41,14 @@ const Router = () => {
           element={
             <Default>
               <Register />
+            </Default>
+          }
+        />
+        <Route
+          path="/login"
+          element={
+            <Default>
+              <Login />
             </Default>
           }
         />

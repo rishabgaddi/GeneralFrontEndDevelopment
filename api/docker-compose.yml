@@ -1,4 +1,4 @@
-version: '3'
+version: "3"
 
 services:
   mongo:
@@ -13,7 +13,7 @@ services:
 
   mongo-express:
     image: mongo-express
-    restart: on-failure
+    restart: always
     ports:
       - 8081:8081
     depends_on:
@@ -47,3 +47,5 @@ services:
       - api
     volumes:
       - ./front-test:/app
+    environment:
+      VITE_API_URL: http://localhost:4500

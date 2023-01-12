@@ -22,7 +22,12 @@ const Register = () => {
   const onSubmtHandler = async (event) => {
     event.preventDefault();
 
-    if (formData.email === "" || formData.password === "") {
+    if (
+      formData.email === "" ||
+      formData.password === "" ||
+      formData.email_confirm === "" ||
+      formData.password_confirm === ""
+    ) {
       setMsg("Email or password is empty");
       return;
     }

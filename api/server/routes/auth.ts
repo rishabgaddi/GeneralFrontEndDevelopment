@@ -2,6 +2,7 @@ import express, { Request, Response } from "express";
 import bcrypt from "bcrypt";
 
 import userModel from "~/models/userModel";
+import { isAuth } from "~/middlewares/auth";
 
 const saltRounds = 10;
 
@@ -47,7 +48,7 @@ Router.post(
   }
 );
 
-Router.post("/login", async (request: Request, response: Response) => {
+Router.post("/login", async (request: any, response: Response) => {
   const { email, password } = request.body;
 
   if (
@@ -61,7 +62,12 @@ Router.post("/login", async (request: Request, response: Response) => {
       if (res) {
         let success = await bcrypt.compareSync(password, res.password);
         if (success) {
-          return response.status(200).json({ msg: "Successfully login" });
+          const user = {
+            email: res.email,
+            todos: res.todos,
+          };
+          request.session.user = user;
+          return response.status(200).json(user);
         }
       }
       return response
@@ -76,4 +82,16 @@ Router.post("/login", async (request: Request, response: Response) => {
     .json({ msg: "Email and Password are either missing or empty." });
 });
 
+Router.get("/me", isAuth, async (request: any, response: Response) => {
+  return response.status(200).json(request.session.user);
+});
+
 export default Router;
+
+Router.get("/logout", async (request: any, response: Response) => {
+  if (request.session && request.session.user) {
+    await request.session.destroy();
+    return response.status(200).json({ msg: "Successfully logged out." });
+  }
+  return response.status(200).json({ msg: "No user logged in." });
+});
