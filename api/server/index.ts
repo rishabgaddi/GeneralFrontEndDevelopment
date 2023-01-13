@@ -6,6 +6,7 @@ const helmet = require("helmet");
 const mongoose = require("mongoose");
 const cors = require("cors");
 let session = require("express-session");
+const cookieParser = require("cookie-parser");
 
 const app = express();
 
@@ -18,6 +19,7 @@ app.use(
     credentials: true,
   })
 );
+app.use(cookieParser());
 
 import authRouter from "./routes/auth";
 import todoRouter from "./routes/todo";

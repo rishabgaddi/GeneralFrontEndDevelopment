@@ -5,18 +5,23 @@ import { useEffect } from "react";
 import { getMe } from "../services/auth";
 import { setAuth } from "../slices/authSlice";
 
-const Default = ({ children }) => {
+const Default = ({ children, privated = false }) => {
   const { isAuth } = useSelector((state) => state.auth);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const fetchUser = async () => {
-    const res = await getMe();
-    console.log("res", res);
-    if (res.status === 503) {
-      return navigate("/login");
+    let token = localStorage.getItem("token");
+    const res = await getMe(token);
+    if (res.status && res.status === 200) {
+      dispatch(
+        setAuth({
+          user: res.data,
+          token: token,
+        })
+      );
     }
-    dispatch(setAuth(res.data));
+    if (privated && !isAuth) return navigate("/login");
   };
 
   useEffect(() => {
@@ -26,11 +31,12 @@ const Default = ({ children }) => {
   return (
     <div id="default">
       <nav>
-        <Link to={"/"}>Home</Link>
         {isAuth && (
           <>
+            <Link to={"/"}>Home</Link>
             <Link to={"/animals"}>Animals</Link>
             <Link to={"/contact"}>Contacts</Link>
+            <Link to={"/logout"}>Logout</Link>
           </>
         )}
         {!isAuth && (

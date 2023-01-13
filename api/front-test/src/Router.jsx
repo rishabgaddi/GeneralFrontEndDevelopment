@@ -7,6 +7,7 @@ import Animals from "./pages/Animals";
 import Contact from "./pages/Contact";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
+import Logout from "./pages/Logout";
 
 const Router = () => {
   return (
@@ -15,7 +16,7 @@ const Router = () => {
         <Route
           path="/"
           element={
-            <Default>
+            <Default privated>
               <Home />
             </Default>
           }
@@ -23,7 +24,7 @@ const Router = () => {
         <Route
           path="/animals"
           element={
-            <Default>
+            <Default privated>
               <Animals />
             </Default>
           }
@@ -31,7 +32,7 @@ const Router = () => {
         <Route
           path="/contact"
           element={
-            <Default>
+            <Default privated>
               <Contact />
             </Default>
           }
@@ -49,6 +50,14 @@ const Router = () => {
           element={
             <Default>
               <Login />
+            </Default>
+          }
+        />
+        <Route
+          path="/logout"
+          element={
+            <Default>
+              <Logout />
             </Default>
           }
         />

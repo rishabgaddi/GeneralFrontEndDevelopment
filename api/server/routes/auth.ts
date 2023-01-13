@@ -1,8 +1,10 @@
 import express, { Request, Response } from "express";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
 import userModel from "~/models/userModel";
 import { isAuth } from "~/middlewares/auth";
+import { generateAccessToken, generateRefreshToken } from "~/tools";
 
 const saltRounds = 10;
 
@@ -63,11 +65,20 @@ Router.post("/login", async (request: any, response: Response) => {
         let success = await bcrypt.compareSync(password, res.password);
         if (success) {
           const user = {
+            id: res._id,
             email: res.email,
             todos: res.todos,
           };
-          request.session.user = user;
-          return response.status(200).json(user);
+
+          const token = generateAccessToken({ user });
+          const refreshToken = generateRefreshToken({ user });
+
+          response.cookie("refreshtoken", refreshToken, {
+            httpOnly: true,
+            maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
+          });
+
+          return response.status(200).json({ user, token });
         }
       }
       return response
@@ -83,15 +94,39 @@ Router.post("/login", async (request: any, response: Response) => {
 });
 
 Router.get("/me", isAuth, async (request: any, response: Response) => {
-  return response.status(200).json(request.session.user);
+  return response.status(200).json(request.user);
 });
 
 export default Router;
 
 Router.get("/logout", async (request: any, response: Response) => {
-  if (request.session && request.session.user) {
+  if (request.session) {
     await request.session.destroy();
-    return response.status(200).json({ msg: "Successfully logged out." });
   }
-  return response.status(200).json({ msg: "No user logged in." });
+  return response.status(200).json({ msg: "Session closed." });
+});
+
+Router.get("/refresh-token", async (request: any, response: Response) => {
+  try {
+    const refreshToken = request.cookies.refreshtoken;
+    if (!refreshToken) {
+      return response.sendStatus(401);
+    }
+
+    const decoded = <any>jwt.verify(refreshToken, `my-secret`);
+    if (!decoded) {
+      return response.sendStatus(403);
+    }
+
+    const user = await userModel.findById({ _id: decoded.user.id });
+    if (!user) {
+      return response.sendStatus(403);
+    }
+
+    const token = generateAccessToken({ user });
+    return response.status(200).json({ token, user });
+  } catch (err) {
+    console.log(err);
+    return response.status(403).json(err);
+  }
 });

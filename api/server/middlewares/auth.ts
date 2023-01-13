@@ -1,9 +1,22 @@
 import { Request, Response } from "express";
+import jwt from "jsonwebtoken";
 
-export const isAuth = (request: any, response: Response, next: any) => {
-  if (request.session && request.session.user) {
+import userModel from "~/models/userModel";
+
+export const isAuth = async (request: any, response: Response, next: any) => {
+  const token = request.headers.authorization.split(" ")[1];
+  if (!token) {
+    return response.status(401).send("Access denied.");
+  }
+  try {
+    const decoded = <any>jwt.verify(token, `my-secret`);
+    const user = await userModel.findOne({ email: decoded.user.email });
+    if (!user) {
+      return response.status(400).send("Invalid token.");
+    }
+    request.user = user;
     next();
-  } else {
-    return response.status(503).json({ msg: "Unauthorized." });
+  } catch (error) {
+    return response.status(400).send("Invalid token.");
   }
 };

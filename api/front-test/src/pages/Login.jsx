@@ -30,6 +30,7 @@ const Login = () => {
 
     const res = await login(form);
     if (res.status === 200) {
+      localStorage.setItem("token", res.data.token);
       dispatch(setAuth(res.data));
       navigate("/");
     } else {
