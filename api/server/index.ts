@@ -24,14 +24,14 @@ app.use(cookieParser());
 import authRouter from "./routes/auth";
 import todoRouter from "./routes/todo";
 
-app.use(
-  session({
-    secret: "Its a secret.",
-    resave: false,
-    saveUninitialized: true,
-    cookie: { secure: false },
-  })
-);
+// app.use(
+//   session({
+//     secret: "Its a secret.",
+//     resave: false,
+//     saveUninitialized: true,
+//     cookie: { secure: false },
+//   })
+// );
 
 mongoose.connect(
   `${process.env.MONGO_DB}`,

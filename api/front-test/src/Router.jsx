@@ -8,6 +8,8 @@ import Contact from "./pages/Contact";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
 import Logout from "./pages/Logout";
+import { Todos } from "./pages/Todos";
+import TodosRTK from "./pages/TodosRTK";
 
 const Router = () => {
   return (
@@ -58,6 +60,22 @@ const Router = () => {
           element={
             <Default>
               <Logout />
+            </Default>
+          }
+        />
+        <Route
+          path="/todos"
+          element={
+            <Default privated={true}>
+              <Todos />
+            </Default>
+          }
+        />
+        <Route
+          path="/todos-rtk"
+          element={
+            <Default privated={true}>
+              <TodosRTK />
             </Default>
           }
         />

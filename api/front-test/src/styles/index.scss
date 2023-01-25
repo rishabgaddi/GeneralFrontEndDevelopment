@@ -6,4 +6,11 @@
   box-sizing: border-box;
 }
 
+html,
+body,
+#root {
+  min-height: 100vh;
+}
+
 @import "./default";
+@import "./todos";

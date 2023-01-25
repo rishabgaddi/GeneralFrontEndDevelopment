@@ -13,15 +13,14 @@ const Default = ({ children, privated = false }) => {
   const fetchUser = async () => {
     let token = localStorage.getItem("token");
     const res = await getMe(token);
-    if (res.status && res.status === 200) {
+    if (res && res.status === 200) {
       dispatch(
         setAuth({
           user: res.data,
           token: token,
         })
       );
-    }
-    if (privated && !isAuth) return navigate("/login");
+    } else if (privated && !isAuth) return navigate("/login");
   };
 
   useEffect(() => {
@@ -36,6 +35,8 @@ const Default = ({ children, privated = false }) => {
             <Link to={"/"}>Home</Link>
             <Link to={"/animals"}>Animals</Link>
             <Link to={"/contact"}>Contacts</Link>
+            <Link to={"/todos"}>Todos</Link>
+            <Link to={"/todos-rtk"}>Todos RTK</Link>
             <Link to={"/logout"}>Logout</Link>
           </>
         )}
